@@ -1,0 +1,1 @@
+from criptoapp import app
