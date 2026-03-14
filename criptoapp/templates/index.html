@@ -5,20 +5,30 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="color-scheme" content="light dark">
     <link rel="stylesheet" href="/static/css/pico.orange.css">
+    <link rel="stylesheet" href="/static/css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <title>Wallet Cripto</title>
 </head>
 <body>
     <main class="container">
         <header>
+            <div class="crypto-header-container">
+                
             <h2>Mis Movimientos</h2>
+            <span class="crypto-icons">
+                    <i class="fa-brands fa-bitcoin"></i>
+                    <i class="fa-brands fa-ethereum"></i>
+                    <i class="fa-solid fa-coins"></i> </span>
+            </div>
             <nav>
                 <ul>
-                    <li><a href="/" class="secondary">Inicio</a></li>
+                    <li><a href="/">Inicio</a></li>
                     <li><a href="/compras">Nueva Compra</a></li>
                     <li><a href="/cartera">Mi Cartera</a></li>
                 </ul>
             </nav>
         </header>
+       
 
     <table role="grid">
         <thead>
@@ -31,6 +41,28 @@
                 <th>Cantidad</th>
             </tr>
         </thead>
+             <tbody>
+        <!--Lista que se envia desde paython-->
+            {% for mov in datos %}
+            <tr>
+                <!--Pinta los datos de la base de datos,
+                se tiene que llamar igual que lo del browser
+                -->
+                <td>{{ mov.date }}</td>
+                <td>{{ mov.time }}</td>
+                <td>{{ mov.from_currency }}</td>
+                <td>{{ mov.from_quantity }}</td>
+                <td>{{ mov.to_currency }}</td>
+                <td>{{ mov.to_quantity }}</td>
+            </tr>
+            {% else %}
+            <!--Si no hay movimientos muestrame esto-->
+            <tr>
+                <td colspan="6">No hay movimientos registrados.</td>
+            </tr>
+            <!--Se cierra la petición-->
+            {% endfor %}
+        </tbody>
     </table>
     </main>
     
