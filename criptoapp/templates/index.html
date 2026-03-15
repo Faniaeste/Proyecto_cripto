@@ -14,7 +14,7 @@
         <header>
             <div class="crypto-header-container">
                 
-            <h2>Mis Movimientos</h2>
+            <h1>Mis Movimientos</h1>
             <span class="crypto-icons">
                     <i class="fa-brands fa-bitcoin"></i>
                     <i class="fa-brands fa-ethereum"></i>
@@ -28,7 +28,8 @@
                 </ul>
             </nav>
         </header>
-       
+        <!--Empieza el hueco que se puede cambiar-->
+        {% block content %}
 
     <table role="grid">
         <thead>
@@ -64,6 +65,8 @@
             {% endfor %}
         </tbody>
     </table>
+    <!--Aquí se cierra el hueco-->
+    {% endblock %}
     </main>
     
 </body>

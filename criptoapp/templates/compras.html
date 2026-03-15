@@ -1,2 +1,56 @@
-<!DOCTYPE html>
-<title> Nuevas transaciones </title>
+{% extends "index.html" %}
+{% block content %}
+<main class="container">
+    <article>
+        <header>
+            <h3 style="color: #ffb300;font-family:Arial, Helvetica, sans-serif">Registrar Nueva Compra</h3>
+        </header>
+        
+        <form action="/compras" method="POST">
+            <div class="grid">
+                <label for="from_currency">
+                    Moneda de Venta
+                    <select id="from_currency" name="from_currency" required>
+                        <option value="" disabled selected>Moneda</option>
+                        <option value="EUR">Euros (€)</option>
+                        <option value="BTC">Bitcoin (BTC)</option>
+                        <option value="ETH">Ethereum (ETH)</option>
+                        <option value="USDT">Tether (USDT)</option>
+                        <option value="SOL">Solana (SOL)</option>
+                        <option value="Binance Coin">BNB (Binance Coin)</option>
+                        <option value="Ripple">XRP (Ripple)</option>
+                        <option value="ADA">Cardano (ADA)</option>
+                    </select>
+                </label>
+
+                <label for="from_quantity">
+                    Cantidad
+                    <input type="number" id="from_quantity" name="from_quantity" placeholder="0.00" step="any" required>
+                </label>
+            </div>
+
+            <div class="grid">
+                <label for="to_currency">
+                    Moneda de Compra
+                    <select id="to_currency" name="to_currency" required>
+                        <option value="" disabled selected>Moneda</option>
+                        <option value="EUR">Euros (€)</option>
+                        <option value="BTC">Bitcoin (BTC)</option>
+                        <option value="ETH">Ethereum (ETH)</option>
+                        <option value="USDT">Tether (USDT)</option>
+                        <option value="SOL">Solana (SOL)</option>
+                        <option value="Binance Coin">BNB (Binance Coin)</option>
+                        <option value="Ripple">XRP (Ripple)</option>
+                        <option value="ADA">Cardano (ADA)</option>
+                    </select>
+                </label>
+
+                <label>
+                    Acción
+                    <button type="submit" class="outline">Realizar Compra</button>
+                </label>
+            </div>
+        </form>
+    </article>
+</main>
+{% endblock %}

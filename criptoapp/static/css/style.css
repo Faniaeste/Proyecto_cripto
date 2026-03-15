@@ -3,10 +3,16 @@
     margin-bottom: 2rem;
 }
 
-h2 {
-    display: inline-block; 
+h1 {
+    font-weight: bold;
+    display: inline-block;
     vertical-align: middle;
-    margin-right: 15px;  
+    margin-right: 15px;
+    background: linear-gradient(to right, #ff9d00, #f8c494);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    color: transparent;
 }
 
 .crypto-icons {
@@ -16,7 +22,7 @@ h2 {
 
 .crypto-icons i {
     font-size: 2.5rem; 
-    color: #e67e22; 
+    color: #e69422; 
     margin: 0 10px;
 }
 
@@ -24,6 +30,7 @@ nav {
     display: flex;
     justify-content: center;
     font-size: larger;
+}
 
 nav ul {
     padding: 0;
@@ -31,11 +38,18 @@ nav ul {
     display: flex;
     justify-content: center;
     gap: 20px;
-    
 }
 
 nav li {
     margin: 0 10px;
-    
+}
 
+nav a {
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+nav a:hover {
+    color: #ff9f43 !important;
+    text-decoration: none !important;
 }
