@@ -5,6 +5,11 @@
         <header>
             <h3 style="color: #ffb300;font-family:Arial, Helvetica, sans-serif">Registrar Nueva Compra</h3>
         </header>
+        {% if error %}
+            <p style="color: #ff4d4d; background: #ffe6e6; padding: 10px; border-radius: 5px;">
+            {{ error }}
+                </p>
+        {% endif %}
         
         <form action="/compras" method="POST">
             <div class="grid">
@@ -25,7 +30,13 @@
 
                 <label for="from_quantity">
                     Cantidad
-                    <input type="number" id="from_quantity" name="from_quantity" placeholder="0.00" step="any" required>
+                    <input type="number"
+                           id="from_quantity" 
+                           name="from_quantity" 
+                           placeholder="0.00" 
+                           step="any"
+                           min="0.0001"
+                           required>
                 </label>
             </div>
 
