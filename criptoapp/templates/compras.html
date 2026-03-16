@@ -4,12 +4,13 @@
     <article>
         <header>
             <h3 style="color: #ffb300;font-family:Arial, Helvetica, sans-serif">Registrar Nueva Compra</h3>
-        </header>
+   </header>
         {% if error %}
-            <p style="color: #ff4d4d; background: #ffe6e6; padding: 10px; border-radius: 5px;">
-            {{ error }}
-                </p>
+            <p style="color: #d81b60; background: #fdecf2; padding: 10px; border-radius: 4px; border: 1px solid #d81b60;">
+                <strong>Error:</strong> {{ error }}
+            </p>
         {% endif %}
+                
         
         <form action="/compras" method="POST">
             <div class="grid">

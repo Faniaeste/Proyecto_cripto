@@ -46,6 +46,9 @@ def consultar_saldo(moneda):
     #Se suma la moneda
     cursor.execute("SELECT SUM(to_quantity) FROM movements WHERE to_currency = ?", (moneda,))
     resultado_entrada = cursor.fetchone()[0] or 0.0
+    #[0] aquí le pido el primer compartimento porque viene en tuplas, aqnue solo haya 1 número
+    #0.0 es para evitar que devuelva un None y pete el programa al intentar hacer la resta.
+
 
     #Se Suma lo que ha salido de esa moneda
     cursor.execute("SELECT SUM(from_quantity) FROM movements WHERE from_currency = ?", (moneda,))

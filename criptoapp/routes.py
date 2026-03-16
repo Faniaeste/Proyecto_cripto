@@ -1,6 +1,6 @@
 from criptoapp import app
 from flask import render_template, request, flash, redirect
-from models import select_all, insert
+from models import select_all, insert, consultar_saldo
 from datetime import datetime
 
 @app.route("/")
@@ -13,8 +13,14 @@ def compra():
     if request.method == 'POST':
         #Aquí se recoge lo que viene del formulario
         moneda_venta = request.form.get('from_currency')
-        moneda_cantidad = request.form.get('from_quantity')
+        moneda_cantidad = float(request.form.get('from_quantity'))
         moneda_compra = request.form.get('to_currency')
+
+        # VALIDACIÓN DE SALDO (Excepto para Euros)
+        if moneda_venta != "EUR":
+            saldo_actual = consultar_saldo(moneda_venta)
+            if moneda_cantidad > saldo_actual:
+                return render_template("compras.html", error=f"Saldo insuficiente. Solo tienes {saldo_actual} {moneda_venta}")
 
         #Validación si las monedas son las mismas
         if moneda_venta == moneda_compra:
