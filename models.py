@@ -1,11 +1,57 @@
 import sqlite3
 from config import DATABASE_PATH
 
-
+#Esta función sirve para leer la base de datos
 def select_all():
     conexion = sqlite3.connect(DATABASE_PATH)
+    #Lo convierte en un "diccionario", así me quito el problema de las tuplas.
+    conexion.row_factory = sqlite3.Row
     cursor = conexion.cursor()
     cursor.execute("SELECT id, date, time, from_currency, from_quantity, to_currency, to_quantity FROM movements ORDER BY date DESC")
     datos = cursor.fetchall()
     conexion.close()
     return datos
+
+#Esta sirve para insertar datos nuevos
+def insert(movimiento):
+    #Conecta con la base
+    conexion = sqlite3.connect(DATABASE_PATH)
+    cursor = conexion.cursor()
+    
+    #Los "?" son huecos que luego rellenamos, por seguridad.
+    sql = """
+        INSERT INTO movements (date, time, from_currency, from_quantity, to_currency, to_quantity)
+        VALUES (?, ?, ?, ?, ?, ?)
+    """
+    
+    #Ejecutamos pasando los datos en orden
+    cursor.execute(sql, (
+        movimiento['date'],
+        movimiento['time'],
+        movimiento['from_currency'],
+        movimiento['from_quantity'],
+        movimiento['to_currency'],
+        movimiento['to_quantity']
+    ))
+    
+    #Aquí se guardan los cambios y se cierrar
+    conexion.commit()
+    conexion.close()
+
+
+def consultar_saldo(moneda):
+    conexion = sqlite3.connect(DATABASE_PATH)
+    cursor = conexion.cursor()
+
+    #Se suma la moneda
+    cursor.execute("SELECT SUM(to_quantity) FROM movements WHERE to_currency = ?", (moneda,))
+    resultado_entrada = cursor.fetchone()[0] or 0.0
+
+    #Se Suma lo que ha salido de esa moneda
+    cursor.execute("SELECT SUM(from_quantity) FROM movements WHERE from_currency = ?", (moneda,))
+    resultado_salida = cursor.fetchone()[0] or 0.0
+
+    conexion.close()
+
+    #Total es lo que entró menos lo que salió
+    return resultado_entrada - resultado_salida
