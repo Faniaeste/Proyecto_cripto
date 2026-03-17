@@ -40,6 +40,7 @@
                 <th>Cantidad</th>
                 <th>Venta</th>
                 <th>Cantidad</th>
+                <th>P.U</th>
             </tr>
         </thead>
              <tbody>
@@ -55,6 +56,14 @@
                 <td>{{ mov.from_quantity }}</td>
                 <td>{{ mov.to_currency }}</td>
                 <td>{{ mov.to_quantity }}</td>
+                <td>
+                    <!--Para que no de error cuando el valor sea 0 o none sino hay valor-->
+                    {% if mov.to_quantity and mov.to_quantity != 0 %}
+                        {{ (mov.from_quantity / mov.to_quantity) | round(8) }}
+                    {% else %}
+                        0
+                    {% endif %}
+                </td>
             </tr>
             {% else %}
             <!--Si no hay movimientos muestrame esto-->

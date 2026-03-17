@@ -1,5 +1,6 @@
 import sqlite3
-from config import DATABASE_PATH
+from config import DATABASE_PATH, SECRET_KEY
+import requests 
 
 #Esta función sirve para leer la base de datos
 def select_all():
@@ -58,3 +59,30 @@ def consultar_saldo(moneda):
 
     #Total es lo que entró menos lo que salió
     return resultado_entrada - resultado_salida
+
+def obtener_precio_api(cantidad, moneda_compra, moneda_venta):
+    #La URL para convertir monedas en criptos
+    url = "https://pro-api.coinmarketcap.com/v2/tools/price-conversion"
+
+    #Esto se envia a la API
+    parametros = {
+        'amount': cantidad,
+        'symbol': moneda_compra,
+        'convert': moneda_venta
+    }
+    cabeceras = {
+    'X-CMC_PRO_API_KEY': SECRET_KEY
+    }
+    try:
+        respuesta = requests.get(url, params=parametros, headers=cabeceras)
+        dato_json = respuesta.json()
+        #Saco el precio de los datos json
+        precio = dato_json['data'][0]['quote'][moneda_venta]['price']
+        return precio
+    #Para que no se rompa nada, si falla la api le doy un error.
+
+    except Exception as e:
+        print("Vaya, no ay conexión con la API", e)
+        return None
+
+ 
