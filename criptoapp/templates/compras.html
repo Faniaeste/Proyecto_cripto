@@ -17,50 +17,59 @@
                 <label for="from_currency">
                     Moneda de Venta
                     <select id="from_currency" name="from_currency" required>
-                        <option value="" disabled selected>Moneda</option>
-                        <option value="EUR">Euros (€)</option>
-                        <option value="BTC">Bitcoin (BTC)</option>
-                        <option value="ETH">Ethereum (ETH)</option>
-                        <option value="USDT">Tether (USDT)</option>
-                        <option value="SOL">Solana (SOL)</option>
-                        <option value="Binance Coin">BNB (Binance Coin)</option>
-                        <option value="Ripple">XRP (Ripple)</option>
-                        <option value="ADA">Cardano (ADA)</option>
+                        <!--Agrego el if sel_from para que siga la opcion seleccionada y no se borre-->
+                        <option value="" disabled {% if not sel_from %}selected{% endif %}>Selecciona Moneda</option>
+                        <option value="EUR" {% if sel_from == 'EUR' %}selected{% endif %}>Euros (€)</option>
+                        <option value="BTC" {% if sel_from == 'BTC' %}selected{% endif %}>Bitcoin (BTC)</option>
+                        <option value="ETH" {% if sel_from == 'ETH' %}selected{% endif %}>Ethereum (ETH)</option>
+                        <option value="USDT" {% if sel_from == 'USDT' %}selected{% endif %}>Tether (USDT)</option>
+                        <option value="SOL"{% if sel_from == "SOL" %}selected{% endif %}>Solana (SOL)</option>
+                        <option value="Binance Coin"{% if sel_from == "Binance Coin" %}selected{% endif %}>BNB (Binance Coin)</option>
+                        <option value="Ripple"{% if sel_from == "Ripple" %}selected{% endif %}>XRP (Ripple)</option>
+                        <option value="ADA"{% if sel_from == "ADA" %}selected{% endif %}>Cardano (ADA)</option>
                     </select>
                 </label>
 
                 <label for="from_quantity">
-                    Cantidad
+                    Cantidad a vender
                     <input type="number"
                            id="from_quantity" 
                            name="from_quantity" 
                            placeholder="0.00" 
                            step="any"
                            min="0.0001"
+                           value="{{ v_from }}"
                            required>
                 </label>
+                <button type="submit" formnovalidate name="btn_calcular" value="calcular">
+                        🔍 Calcular precio real
+                </button>
             </div>
-
             <div class="grid">
                 <label for="to_currency">
                     Moneda de Compra
                     <select id="to_currency" name="to_currency" required>
-                        <option value="" disabled selected>Moneda</option>
-                        <option value="EUR">Euros (€)</option>
-                        <option value="BTC">Bitcoin (BTC)</option>
-                        <option value="ETH">Ethereum (ETH)</option>
-                        <option value="USDT">Tether (USDT)</option>
-                        <option value="SOL">Solana (SOL)</option>
-                        <option value="Binance Coin">BNB (Binance Coin)</option>
-                        <option value="Ripple">XRP (Ripple)</option>
-                        <option value="ADA">Cardano (ADA)</option>
+                        <!--Agrego el if sel_from para que siga la opcion seleccionada y no se borre-->
+                        <option value="" disabled {% if not sel_to %}selected{% endif %}>Selecciona Moneda</option>
+                        <option value="EUR" {% if sel_to == 'EUR' %}selected{% endif %}>Euros (€)</option>
+                        <option value="BTC" {% if sel_to == 'BTC' %}selected{% endif %}>Bitcoin (BTC)</option>
+                        <option value="ETH" {% if sel_to == 'ETH' %}selected{% endif %}>Ethereum (ETH)</option>
+                        <option value="USDT" {% if sel_to == 'USDT' %}selected{% endif %}>Tether (USDT)</option>
+                        <option value="SOL"{% if sel_to == "SOL" %}selected{% endif %}>Solana (SOL)</option>
+                        <option value="Binance Coin"{% if sel_to == "Binance Coin" %}selected{% endif %}>BNB (Binance Coin)</option>
+                        <option value="Ripple"{% if sel_to == "Ripple" %}selected{% endif %}>XRP (Ripple)</option>
+                        <option value="ADA"{% if sel_to == "ADA" %}selected{% endif %}>Cardano (ADA)</option>
                     </select>
                 </label>
 
-                <label>
-                    Acción
-                    <button type="submit" class="outline">Realizar Compra</button>
+                <label for="to_quantity">
+                    Cantidad que recibes
+                    <input type="number" name="to_quantity" id="to_quantity"
+                    value="{{ cantidad_calculada }}" placeholder="Clic en calcular">
+
                 </label>
+
+                    <button type="submit" class="outline">Realizar Compra</button>
             </div>
         </form>
     </article>

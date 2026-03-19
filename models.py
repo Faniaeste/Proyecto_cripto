@@ -60,24 +60,29 @@ def consultar_saldo(moneda):
     #Total es lo que entró menos lo que salió
     return resultado_entrada - resultado_salida
 
-def obtener_precio_api(cantidad, moneda_compra, moneda_venta):
+def obtener_precio_api(cantidad, moneda_venta, moneda_compra):
     #La URL para convertir monedas en criptos
     url = "https://pro-api.coinmarketcap.com/v2/tools/price-conversion"
+
+    #amount: cantidad a convertir
+    #symbol: la moneda que TIENES
+    #convert: la moneda que QUIERES
 
     #Esto se envia a la API
     parametros = {
         'amount': cantidad,
-        'symbol': moneda_compra,
-        'convert': moneda_venta
+        'symbol': moneda_venta,
+        'convert': moneda_compra
     }
     cabeceras = {
-    'X-CMC_PRO_API_KEY': SECRET_KEY
+        'X-CMC_PRO_API_KEY': SECRET_KEY
     }
     try:
         respuesta = requests.get(url, params=parametros, headers=cabeceras)
         dato_json = respuesta.json()
-        #Saco el precio de los datos json
-        precio = dato_json['data'][0]['quote'][moneda_venta]['price']
+        
+        #Primero accedo a data, posición 0, quote, moneda_compra, price.
+        precio = dato_json['data'][0]['quote'][moneda_compra]['price']
         return precio
     #Para que no se rompa nada, si falla la api le doy un error.
 
