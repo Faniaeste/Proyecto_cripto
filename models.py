@@ -89,5 +89,18 @@ def obtener_precio_api(cantidad, moneda_venta, moneda_compra):
     except Exception as e:
         print("Vaya, no ay conexión con la API", e)
         return None
+    
+    #Función para obtener el total de mi cartera
+def obtener_total_cartera():
+    #Aquí va toda la lista de monedas
+    monedas = ["EUR","BTC","ETH","USDT","SOL","BNB","XRP","ADA"]
+    cartera = []
+
+    for moneda in monedas:
+        cantidad = consultar_saldo(moneda)
+        #Solo añadimos a la cartera si tenemos algo de esa moneda
+        if cantidad > 0:
+            cartera.append({ "symbol": moneda, "cantidad": cantidad })
+    return cartera
 
  

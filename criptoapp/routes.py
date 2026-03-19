@@ -1,6 +1,6 @@
 from criptoapp import app
 from flask import render_template, request, flash, redirect
-from models import select_all, insert, consultar_saldo, obtener_precio_api
+from models import select_all, insert, consultar_saldo, obtener_precio_api, obtener_total_cartera
 from datetime import datetime
 
 @app.route("/")
@@ -11,9 +11,9 @@ def inicio():
 @app.route("/compras", methods=['GET','POST'])
 def compra():
     #Pongo variables para que el HTML no explote si no hay datos
-    sel_from = "" #Es la moneda para vender
-    v_from = "" #Es la cantidad numérica 
-    sel_to = ""  #Es la moneda para comprar
+    moneda_venta = "" #Es la moneda para vender
+    from_quant = "" #Es la cantidad numérica 
+    moneda_compra = ""  #Es la moneda para comprar
     cantidad_calculada = "" #Es el resultado de la API
 
     if request.method == 'POST':
@@ -80,8 +80,27 @@ def compra():
             }
             insert(nuevo_movimiento)
             return redirect("/")
-    return render_template("compras.html")
+    return render_template("compras.html",  sel_from=moneda_venta,
+         sel_to=moneda_compra, fv_from=from_quant, cantidad_calculada=cantidad_calculada)
 
 @app.route("/cartera")
 def cartera():
-    return render_template("cartera.html")
+    #Obtenemos que moneda tenemos y cuántas
+    mis_monedas = obtener_total_cartera()
+    total_valor_euros = 0
+
+    #Calculamos el valor total de cada una
+    for item in mis_monedas:
+        if item['symbol'] == "EUR":
+            item['valor_actual'] = item['cantidad']
+        else:
+            #Consulto a la Api cuanto vale la moneda en EUR
+            precio_en_euros = obtener_precio_api(item['cantidad'], item['symbol'], "EUR")
+            if precio_en_euros:
+                item['valor_actual'] = precio_en_euros
+            else:
+                item['valor_actual'] = 0
+
+        total_valor_euros += item['valor_actual']
+
+    return render_template("cartera.html", cartera=mis_monedas, total=total_valor_euros, )

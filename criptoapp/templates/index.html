@@ -22,9 +22,21 @@
             </div>
             <nav>
                 <ul>
-                    <li><a href="/">Inicio</a></li>
-                    <li><a href="/compras">Nueva Compra</a></li>
-                    <li><a href="/cartera">Mi Cartera</a></li>
+                    <li>
+                        <a href="/" class="button {% if request.endpoint == 'inicio' %}secondary outline{% endif %}" 
+                            {% if request.endpoint == 'inicio' %}style="pointer-events: none; opacity: 0.6;"{% endif %}>
+                                Inicio</a>
+                    </li>
+                    <li>
+                        <a href="/compras" class="button {% if request.endpoint == 'compra' %}secondary outline{% endif %}"
+                            {% if request.endpoint == 'compra' %}style="pointer-events: none; opacity: 0.6;"{% endif %}>
+                                Nueva Compra</a>
+                    </li>
+                    <li>
+                       <a href="/cartera" class="button {% if request.endpoint == 'cartera' %}secondary outline{% endif %}"
+                            {% if request.endpoint == 'cartera' %}style="pointer-events: none; opacity: 0.6;"{% endif %}>
+                                Cartera</a>
+                    </li>
                 </ul>
             </nav>
         </header>
@@ -36,9 +48,9 @@
             <tr>
                 <th>Fecha</th>
                 <th>Hora</th>
-                <th>Compra</th>
+                <th>Vendo</th>
                 <th>Cantidad</th>
-                <th>Venta</th>
+                <th>Compro</th>
                 <th>Cantidad</th>
                 <th>P.U</th>
             </tr>
