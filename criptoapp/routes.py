@@ -15,11 +15,15 @@ def compra():
     from_quant = "" #Es la cantidad numérica 
     moneda_compra = ""  #Es la moneda para comprar
     cantidad_calculada = "" #Es el resultado de la API
+    saldo_v = 0.0 #Para mostrar el saldo de esa moneda
 
     if request.method == 'POST':
         #Se recoge todo lo que hay en el formulario
         moneda_venta = request.form.get('from_currency')
         moneda_compra = request.form.get('to_currency')
+
+        #Calculamos el saldo de la moneda de venta
+        saldo_v = consultar_saldo(moneda_venta)
            
         #Saco el numero fuera para que este libre para ambos botones
         try:
@@ -29,8 +33,13 @@ def compra():
 
         #Botón calcular    
         if "btn_calcular" in request.form:
+            if moneda_venta == moneda_compra:
+                return render_template("compras.html", error="Las monedas no pueden ser iguales", 
+                               sel_from=moneda_venta, sel_to=moneda_compra, v_from=from_quant, saldo_v=saldo_v)
+
             if from_quant <= 0:
-                return render_template("compras.html", error="Introduce una cantidad", sel_from=moneda_venta, sel_to=moneda_compra)
+                saldo_v = consultar_saldo(moneda_venta)
+                return render_template("compras.html", error="Introduce una cantidad", sel_from=moneda_venta, sel_to=moneda_compra, saldo_v=saldo_v)
 
             # Llamamos a la función de models.py
             precio_real = obtener_precio_api(from_quant, moneda_venta, moneda_compra)
@@ -40,7 +49,8 @@ def compra():
                 return render_template("compras.html", cantidad_calculada=precio_real,
                                                        sel_to=moneda_compra,
                                                        sel_from=moneda_venta,
-                                                       v_from=from_quant)
+                                                       v_from=from_quant,
+                                                       saldo_v=saldo_v)
             else:
                 return render_template("compras.html", error="No se pudo obtener el precio de la API", sel_from=moneda_venta, sel_to=moneda_compra, v_from=from_quant)
 
@@ -57,9 +67,8 @@ def compra():
 
             # VALIDACIÓN DE SALDO (Excepto para Euros)
             if moneda_venta != "EUR":
-                saldo_actual = consultar_saldo(moneda_venta)
-                if from_quant > saldo_actual:
-                    return render_template("compras.html", error=f"Saldo insuficiente. Solo tienes {saldo_actual} {moneda_venta}",
+                if from_quant > saldo_v:
+                    return render_template("compras.html", error=f"Saldo insuficiente. Solo tienes {saldo_v} {moneda_venta}",
                                             sel_from=moneda_venta, sel_to=moneda_compra, v_from=from_quant, cantidad_calculada=to_quant)
 
             #Validación si las monedas son las mismas
@@ -81,7 +90,7 @@ def compra():
             insert(nuevo_movimiento)
             return redirect("/")
     return render_template("compras.html",  sel_from=moneda_venta,
-         sel_to=moneda_compra, fv_from=from_quant, cantidad_calculada=cantidad_calculada)
+         sel_to=moneda_compra, fv_from=from_quant, cantidad_calculada=cantidad_calculada, saldo_v=saldo_v)
 
 @app.route("/cartera")
 def cartera():
@@ -109,4 +118,4 @@ def cartera():
                             total_valor=total_valor_euros,
                              invertido=invertido,
                               recuperado=recuperado,
-                               valor_compra=valor_compra )
+                               valor_compra=valor_compra, )

@@ -40,6 +40,13 @@
                            min="0.0001"
                            value="{{ v_from }}"
                            required>
+
+                    {% if sel_from %}
+                        <span style="font-size: 0.8em; color: #888; display: block; margin-top: -10px; margin-bottom: 10px;">
+                            <!--Default le dice a jinja sino encuentras la variable usa un 0, así no peta-->
+                            <mark><strong>Saldo Disponible:</strong> {{ (saldo_v | default(0)) | round(8) }} {{ sel_from }}</mark>
+                        </span>
+                    {% endif %}
                 </label>
                 <button type="submit" formnovalidate name="btn_calcular" value="calcular">
                         🔍 Calcular precio real
