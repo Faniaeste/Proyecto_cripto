@@ -103,4 +103,23 @@ def obtener_total_cartera():
             cartera.append({ "symbol": moneda, "cantidad": cantidad })
     return cartera
 
+def obtener_totales_euros():
+    conexion = sqlite3.connect(DATABASE_PATH)
+    cursor = conexion.cursor()
+
+    #Invertido, suma de from_quantity cuando la moneda de origen es EUR
+    cursor.execute("SELECT SUM(from_quantity) FROM movements WHERE from_currency = 'EUR'")
+    invertido = cursor.fetchone()[0] or 0.0
+
+    #Recuperado, suma de to_quantity cuando la moneda de destino es EUR
+    cursor.execute("SELECT SUM(to_quantity) FROM movements WHERE to_currency = 'EUR'")
+    recuperado = cursor.fetchone()[0] or 0.0
+
+    conexion.close()
+    
+    #Valor de compra es la diferencia
+    valor_compra = invertido - recuperado
+    
+    return invertido, recuperado, valor_compra
+
  

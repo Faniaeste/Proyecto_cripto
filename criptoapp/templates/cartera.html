@@ -1,11 +1,47 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Estado de mi wallet</title>
-</head>
-<body>
-    
-</body>
-</html>
+{% extends "index.html" %}
+
+{% block content %}
+<main class="container">
+    <article>
+        <header>
+            <h3 style="color: #ffb300;">Estado de la Cartera</h3>
+        </header>
+
+        <table>
+            <thead>
+                <tr>
+                    <th>Moneda</th>
+                    <th>Cantidad</th>
+                    <th>Valor Actual (EUR)</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for moneda in cartera %}
+                <tr>
+                    <td>{{ moneda.symbol }}</td>
+                    <td>{{ moneda.cantidad | round(8) }}</td>
+                    <td>{{ moneda.valor_actual | round(2) }} €</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+        <footer>
+            <div class="grid">
+                <div>
+                    <strong>Invertido:</strong> {{ invertido | round(2) }} €
+                </div>
+                <div>
+                    <strong>Recuperado:</strong> {{ recuperado | round(2) }} €
+                </div>
+                <div>
+                    <strong>Valor de Compra:</strong> {{ valor_compra | round(2) }} €
+                </div>
+                <div>
+                    <mark><strong>Valor Actual:</strong> {{ total_valor | round(2) }} €</mark>
+                </div>
+            </div>
+        </footer>
+    </article>
+</main>
+{% endblock %}

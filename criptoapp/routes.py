@@ -1,6 +1,6 @@
 from criptoapp import app
 from flask import render_template, request, flash, redirect
-from models import select_all, insert, consultar_saldo, obtener_precio_api, obtener_total_cartera
+from models import select_all, insert, consultar_saldo, obtener_precio_api, obtener_total_cartera, obtener_totales_euros
 from datetime import datetime
 
 @app.route("/")
@@ -85,7 +85,7 @@ def compra():
 
 @app.route("/cartera")
 def cartera():
-    #Obtenemos que moneda tenemos y cuántas
+    #Obtenemos las criptos y su valor actual en €
     mis_monedas = obtener_total_cartera()
     total_valor_euros = 0
 
@@ -102,5 +102,11 @@ def cartera():
                 item['valor_actual'] = 0
 
         total_valor_euros += item['valor_actual']
+    #Obtengo los totales de inversión
+    invertido, recuperado, valor_compra = obtener_totales_euros()
 
-    return render_template("cartera.html", cartera=mis_monedas, total=total_valor_euros, )
+    return render_template("cartera.html", cartera=mis_monedas,
+                            total_valor=total_valor_euros,
+                             invertido=invertido,
+                              recuperado=recuperado,
+                               valor_compra=valor_compra )
