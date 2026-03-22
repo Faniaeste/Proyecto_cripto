@@ -16,6 +16,7 @@ def compra():
     moneda_compra = ""  #Es la moneda para comprar
     cantidad_calculada = "" #Es el resultado de la API
     saldo_v = 0.0 #Para mostrar el saldo de esa moneda
+    precio_u = "" #Para el precio unitario
 
     if request.method == 'POST':
         #Se recoge todo lo que hay en el formulario
@@ -45,18 +46,24 @@ def compra():
             precio_real = obtener_precio_api(from_quant, moneda_venta, moneda_compra)
             
             if precio_real:
+                precio_u = precio_real / from_quant
                 #Volvemos a mostrar el formulario pero con los datos para que no se borren.
                 return render_template("compras.html", cantidad_calculada=precio_real,
                                                        sel_to=moneda_compra,
                                                        sel_from=moneda_venta,
                                                        v_from=from_quant,
-                                                       saldo_v=saldo_v)
+                                                       saldo_v=saldo_v,
+                                                       precio_u=precio_u)
             else:
                 return render_template("compras.html", error="No se pudo obtener el precio de la API", sel_from=moneda_venta, sel_to=moneda_compra, v_from=from_quant)
 
         #Botón comprar
         else:
             to_quant = request.form.get('to_quantity')
+            #Si la compra falla, y queremos volver a mostrar la pagina con todos
+            #los datos ue ya teníamos, sino lo hacemos así al recuperar la página
+            #saldría vacío y pareceria que se ubiera roto la página
+            precio_u = request.form.get('precio_unitario_hidden')
 
             # VALIDACIÓN: Si el usuario intenta comprar sin calcular, moneda_cantidad_recibida estará vacío
             if not to_quant or to_quant == "":

@@ -41,16 +41,33 @@
                            value="{{ v_from }}"
                            required>
 
-                    {% if sel_from %}
+                    {% if sel_from and sel_from != "EUR" %}
                         <span style="font-size: 0.8em; color: #888; display: block; margin-top: -10px; margin-bottom: 10px;">
                             <!--Default le dice a jinja sino encuentras la variable usa un 0, así no peta-->
                             <mark><strong>Saldo Disponible:</strong> {{ (saldo_v | default(0)) | round(8) }} {{ sel_from }}</mark>
+                    {% elif sel_from == "EUR" %}
+                        <span style="font-size: 0.8em; color: #888; display: block; margin-top: -10px; margin-bottom: 10px;">
+                            <mark><strong>Saldo Disponible:</strong> Ilimitado</mark>
                         </span>
                     {% endif %}
                 </label>
-                <button type="submit" formnovalidate name="btn_calcular" value="calcular">
-                        🔍 Calcular precio real
+                <div style="display: flex; flex-direction: column; gap: 10px; align-items: center; justify-content: center;">
+                <!--Aquí va lo que emos hecho un routes, para no perder lo mostrado, este campo
+                va a parte porque este no lo rellena el usuario, se lo entrega la api, y así no lo olvida
+                -->
+                <label for="precio_u">Precio Unitario:
+                    <input type="text" id="precio_u" name="precio_u" 
+                        value="{{ (precio_u | default(0)) | round(8) }}" 
+                        readonly 
+                        style="background-color: #1a212d; color: #a0a0a0; border: 1px solid #2d3748;">
+                </label>
+                <input type="hidden" name="precio_unitario_hidden" value="{{ precio_u }}">
+
+                <button name="btn_calcular" type="submit" 
+                        style="width: 200px; padding: 10px; margin: 0; background-color: #d35400; border: none;">
+                    🧮 Calcular Precio
                 </button>
+            </div>
             </div>
             <div class="grid">
                 <label for="to_currency">
@@ -75,8 +92,12 @@
                     value="{{ cantidad_calculada }}" placeholder="Clic en calcular">
 
                 </label>
+                <div style="display: flex; flex-direction: column; gap: 10px; align-items: center; justify-content: center;">
 
-                    <button type="submit" class="outline">Realizar Compra</button>
+                <button name="btn_comprar" type="submit" 
+                     style="width: 200px; padding: 10px; margin: 0; background-color: transparent; border: 1px solid #d35400; color: #d35400;">
+                    Realizar Compra
+                </button>
             </div>
         </form>
     </article>

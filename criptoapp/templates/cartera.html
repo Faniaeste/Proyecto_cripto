@@ -41,6 +41,14 @@
                     <mark><strong>Valor Actual:</strong> {{ total_valor | round(2) }} €</mark>
                 </div>
             </div>
+            <div style="text-align: center; margin-top: 20px; padding-top: 15px; border-top: 1px solid #eee;">
+                <h4 style="margin-bottom: 0;">
+                    Resultado Inversión: 
+                    <span style="font-weight: bold; color: {% if (total_valor - valor_compra) >= 0 %}green{% else %}red{% endif %};">
+                        {{ (total_valor - valor_compra) | round(2) }} €
+                    </span>
+                </h4>
+            </div>
         </footer>
     </article>
 </main>
